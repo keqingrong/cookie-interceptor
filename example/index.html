@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  It works!
+  <script>
+    if (location.href.indexOf('localhost') !== -1) {
+      document.write('<script src="http://localhost:3000/dist/cookie-interceptor.umd.js" type="text/javascript"><\/script>');
+    } else {
+      document.write('<script src="https://unpkg.com/cookie-interceptor" type="text/javascript"><\/script>');
+    }
+  </script>
+  <script src="./index.js"></script>
+</body>
+
+</html>
