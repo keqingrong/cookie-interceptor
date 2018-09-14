@@ -14,8 +14,8 @@ $ npm install cookie-interceptor
 
 The CDN build is also available on unpkg:
 
-- [unpkg.com/cookie-interceptor/dist/cookie-interceptor.umd.min.js](https://unpkg.com/cookie-interceptor/dist/cookie-interceptor.umd.min.js)
-- [unpkg.com/cookie-interceptor/dist/cookie-interceptor.esm.min.js](https://unpkg.com/cookie-interceptor/dist/cookie-interceptor.esm.min.js)
+- [unpkg.com/cookie-interceptor@0.0.1/dist/cookie-interceptor.umd.js](https://unpkg.com/cookie-interceptor@0.0.1/dist/cookie-interceptor.umd.js)
+- [unpkg.com/cookie-interceptor@0.0.1/dist/cookie-interceptor.umd.min.js](https://unpkg.com/cookie-interceptor@0.0.1/dist/cookie-interceptor.umd.min.js)
 
 ## Usage
 
