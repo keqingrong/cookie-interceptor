@@ -22,24 +22,50 @@ The CDN build is also available on unpkg:
 ```js
 import CookieInterceptor from 'cookie-interceptor';
 
-CookieInterceptor.disableRead();
+CookieInterceptor.disableRead().disableWrite();
 
-CookieInterceptor.disableWrite();
+document.cookie = 'date=20180915';
+console.log(document.cookie); // => ''
+
+CookieInterceptor.enableRead().enableWrite();
+
+document.cookie = 'name=john';
+console.log(document.cookie); // => 'name=john'
 ```
 
 ## API
 
 ### isReadEnabled()
 
+Check if the cookie is readable.
+
 ### isWriteEnabled()
+
+Check if the cookie is writable.
 
 ### enableRead()
 
+Enable READ flag.
+
+You can read all cookies with `document.cookie` property.
+
 ### disableRead()
+
+Disable READ flag.
+
+`document.cookie` will return an empty string.
 
 ### enableWrite()
 
+Enable WRITE flag.
+
+You can write a new cookie or update an existing cookie.
+
 ### disableWrite()
+
+Disable WRITE flag.
+
+`document.cookie="key=value"` will not write a new cookie or update an existing cookie.
 
 ## License
 
