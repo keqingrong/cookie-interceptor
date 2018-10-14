@@ -4,7 +4,8 @@
 
 > A simple JavaScript utility library for intercepting browser cookies
 
-Live demo available at [here](https://rawgit.com/keqingrong/cookie-interceptor/master/example/).
+Live demo available at
+[here](https://keqingrong.github.io/cookie-interceptor/example/).
 
 ## Installation
 
