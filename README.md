@@ -37,7 +37,7 @@ console.log(document.cookie); // => 'name=john'
 
 ### Interceptors
 
-You can intercept before `document.cookie` is read or written.
+You can intercept `document.cookie` before it is read or written.
 
 ```js
 CookieInterceptor.read.use(function (cookie) {
