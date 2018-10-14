@@ -41,8 +41,12 @@ if (property && property.configurable) {
 
 var api = {
   version: version,
-  readEnabled: readEnabled,
-  writeEnabled: writeEnabled,
+  isReadEnabled: function () {
+    return readEnabled;
+  },
+  isWriteEnabled: function () {
+    return writeEnabled;
+  },
   enableRead: function () {
     readEnabled = true;
     return this;
@@ -60,7 +64,6 @@ var api = {
     return this;
   },
   read: {
-    enabled: readEnabled,
     enable: function () {
       readEnabled = true;
     },
@@ -75,7 +78,6 @@ var api = {
     }
   },
   write: {
-    enabled: writeEnabled,
     enable: function () {
       writeEnabled = true;
     },
@@ -92,27 +94,27 @@ var api = {
 };
 
 Object.defineProperties(api, {
-  isReadEnabled: {
+  readEnabled: {
     get: function () {
-      console.warn(
-        'DEPRECATED: "isReadEnabled()" is deprecated. ' +
-        'Use "readEnabled" property instead.'
-      );
-      return function () {
-        return api.readEnabled;
-      }
+      return api.isReadEnabled();
     }
   },
-  isWriteEnabled: {
+  writeEnabled: {
     get: function () {
-      console.warn(
-        'DEPRECATED: "isWriteEnabled()" is deprecated. ' +
-        'Use "writeEnabled" property instead.'
-      );
-      return function () {
-        return api.writeEnabled;
-      }
+      return api.isWriteEnabled();
     }
+  }
+});
+
+Object.defineProperty(api.read, 'enabled', {
+  get: function () {
+    return api.isReadEnabled();
+  }
+});
+
+Object.defineProperty(api.write, 'enabled', {
+  get: function () {
+    return api.isWriteEnabled();
   }
 });
 
