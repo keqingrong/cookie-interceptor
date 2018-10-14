@@ -2,6 +2,8 @@ import { version } from '../package.json';
 
 var readEnabled = true;
 var writeEnabled = true;
+var readHandlers = [];
+var writeHandlers = [];
 
 var property = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
   Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
@@ -9,15 +11,27 @@ var property = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
 if (property && property.configurable) {
   Object.defineProperty(document, 'cookie', {
     get: function () {
-      if (readEnabled) {
-        return property.get.call(document);
+      if (!readEnabled) {
+        return '';
       }
-      return '';
+      if (readHandlers.length) {
+        return readHandlers.reduce(function (prevOutput, currentFn) {
+          return currentFn(prevOutput);
+        }, property.get.call(document));
+      }
+      return property.get.call(document);
     },
     set: function (val) {
-      if (writeEnabled) {
-        property.set.call(document, val);
+      if (!writeEnabled) {
+        return;
       }
+      if (writeHandlers.length) {
+        var output = writeHandlers.reduce(function (prevOutput, currentFn) {
+          return currentFn(prevOutput);
+        }, val);
+        property.set.call(document, output);
+      }
+      property.set.call(document, val);
     }
   });
 } else {
@@ -26,12 +40,8 @@ if (property && property.configurable) {
 
 var api = {
   version: version,
-  isReadEnabled: function () {
-    return readEnabled;
-  },
-  isWriteEnabled: function () {
-    return writeEnabled;
-  },
+  readEnabled: readEnabled,
+  writeEnabled: writeEnabled,
   enableRead: function () {
     readEnabled = true;
     return this;
@@ -47,7 +57,62 @@ var api = {
   disableWrite: function () {
     writeEnabled = false;
     return this;
+  },
+  read: {
+    enabled: readEnabled,
+    enable: function () {
+      readEnabled = true;
+    },
+    disable: function () {
+      readEnabled = false;
+    },
+    use: function (callback) {
+      if (typeof callback !== 'function') {
+        throw new TypeError('The callback provided as parameter 1 is not a function.');
+      }
+      readHandlers.push(callback);
+    }
+  },
+  write: {
+    enabled: writeEnabled,
+    enable: function () {
+      writeEnabled = true;
+    },
+    disable: function () {
+      writeEnabled = false;
+    },
+    use: function (callback) {
+      if (typeof callback !== 'function') {
+        throw new TypeError('The callback provided as parameter 1 is not a function.');
+      }
+      writeHandlers.push(callback);
+    }
   }
 };
+
+Object.defineProperties(api, {
+  isReadEnabled: {
+    get: function () {
+      console.warn(
+        'DEPRECATED: "isReadEnabled()" is deprecated. ' +
+        'Use "readEnabled" property instead.'
+      );
+      return function () {
+        return api.readEnabled;
+      }
+    }
+  },
+  isWriteEnabled: {
+    get: function () {
+      console.warn(
+        'DEPRECATED: "isWriteEnabled()" is deprecated. ' +
+        'Use "writeEnabled" property instead.'
+      );
+      return function () {
+        return api.writeEnabled;
+      }
+    }
+  }
+});
 
 export default api;

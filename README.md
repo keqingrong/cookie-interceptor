@@ -35,37 +35,35 @@ console.log(document.cookie); // => 'name=john'
 
 ## API
 
-### isReadEnabled()
+### Interceptors
 
-Check if the cookie is readable.
+You can intercept before `document.cookie` is read or written.
 
-### isWriteEnabled()
+```js
+CookieInterceptor.read.use(function (cookie) {
+  console.log(cookie);
+  return cookie;
+});
 
-Check if the cookie is writable.
+CookieInterceptor.write.use(function (val) {
+  console.log(val);
+  return val;
+});
+```
 
-### enableRead()
+### Access Control
 
-Enable READ flag.
-
-You can read all cookies with `document.cookie` property.
-
-### disableRead()
-
-Disable READ flag.
-
-`document.cookie` will return an empty string.
-
-### enableWrite()
-
-Enable WRITE flag.
-
-You can write a new cookie or update an existing cookie.
-
-### disableWrite()
-
-Disable WRITE flag.
-
-`document.cookie="key=value"` will not write a new cookie or update an existing cookie.
+- `read.enabled` / `readEnabled`: Check if the cookie is readable.
+- `write.enabled` / `writeEnabled`: Check if the cookie is writable.
+- `read.enable()` / `enableRead()`: Enable `READ` flag. You can read all cookies
+  with `document.cookie` property.
+- `read.disable()` / `disableRead()`: Disable `READ` flag. `document.cookie`
+  will return an empty string.
+- `write.enable()` / `enableWrite()`: Enable `WRITE` flag. You can write a new
+  cookie or update an existing cookie.
+- `write.disable()` / `disableWrite()`: Disable `WRITE` flag. 
+  `document.cookie="key=value"` will not write a new cookie or update an 
+  existing cookie.
 
 ## Browsers support
 
