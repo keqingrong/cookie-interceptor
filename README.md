@@ -54,11 +54,11 @@ CookieInterceptor.write.use(function (val) {
 ### Access Control
 
 - `read.enabled` / `readEnabled`: Check if the cookie is readable.
-- `write.enabled` / `writeEnabled`: Check if the cookie is writable.
 - `read.enable()` / `enableRead()`: Enable `READ` flag. You can read all cookies
   with `document.cookie` property.
 - `read.disable()` / `disableRead()`: Disable `READ` flag. `document.cookie`
   will return an empty string.
+- `write.enabled` / `writeEnabled`: Check if the cookie is writable.
 - `write.enable()` / `enableWrite()`: Enable `WRITE` flag. You can write a new
   cookie or update an existing cookie.
 - `write.disable()` / `disableWrite()`: Disable `WRITE` flag. 
