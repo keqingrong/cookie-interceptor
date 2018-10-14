@@ -30,6 +30,7 @@ if (property && property.configurable) {
           return currentFn(prevOutput);
         }, val);
         property.set.call(document, output);
+        return;
       }
       property.set.call(document, val);
     }
