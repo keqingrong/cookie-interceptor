@@ -8,7 +8,8 @@
   "unpkg": "dist/cookie-interceptor.umd.min.js",
   "types": "types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "build": "rollup -c && npm run uglify",
