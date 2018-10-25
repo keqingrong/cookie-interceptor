@@ -6,6 +6,7 @@
   "jsnext:main": "dist/cookie-interceptor.esm.js",
   "module": "dist/cookie-interceptor.esm.js",
   "unpkg": "dist/cookie-interceptor.umd.min.js",
+  "types": "types/index.d.ts",
   "files": [
     "dist"
   ],
