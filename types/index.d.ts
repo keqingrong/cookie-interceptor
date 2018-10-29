@@ -1,30 +1,25 @@
-declare namespace CookieInterceptor {
-  const version: string;
-  const readEnabled: boolean;
-  const writeEnabled: boolean;
+declare const CookieInterceptor: {
+  version: string;
+  readEnabled: boolean;
+  writeEnabled: boolean;
+  isReadEnabled: () => boolean;
+  isWriteEnabled: () => boolean;
+  enableRead: () => any;
+  disableRead: () => any;
+  enableWrite: () => any;
+  disableWrite: () => any;
+  read: {
+      enabled: boolean;
+      enable: () => void;
+      disable: () => void;
+      use: (callback: (cookie: string) => string) => void;
+  };
+  write: {
+      enabled: boolean;
+      enable: () => void;
+      disable: () => void;
+      use: (callback: (val: string) => string) => void;
+  };
+};
 
-  function isReadEnabled(): boolean;
-  function isWriteEnabled(): boolean;
-  function enableRead(): any;
-  function disableRead(): any;
-  function enableWrite(): any;
-  function disableWrite(): any;
-}
-
-declare namespace CookieInterceptor.read {
-  const enabled: boolean;
-  function enable(): void;
-  function disable(): void;
-  function use(callback: (value: string) => string): void;
-}
-
-declare namespace CookieInterceptor.write {
-  const enabled: boolean;
-  function enable(): void;
-  function disable(): void;
-  function use(callback: (value: string) => string): void;
-}
-
-declare module 'cookie-interceptor' {
-  export = CookieInterceptor;
-}
+export default CookieInterceptor;
