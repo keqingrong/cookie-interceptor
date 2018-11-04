@@ -5,38 +5,62 @@ var writeEnabled = true;
 var readHandlers = [];
 var writeHandlers = [];
 
-var property = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
-  Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
+defineCookie();
 
-if (property && property.configurable) {
-  Object.defineProperty(document, 'cookie', {
-    get: function () {
-      if (!readEnabled) {
-        return '';
-      }
-      if (readHandlers.length) {
-        return readHandlers.reduce(function (prevOutput, currentFn) {
-          return currentFn(prevOutput);
-        }, property.get.call(document));
-      }
-      return property.get.call(document);
-    },
-    set: function (val) {
-      if (!writeEnabled) {
-        return;
-      }
-      if (writeHandlers.length) {
-        var output = writeHandlers.reduce(function (prevOutput, currentFn) {
-          return currentFn(prevOutput);
-        }, val);
-        property.set.call(document, output);
-        return;
-      }
-      property.set.call(document, val);
+function defineCookie() {
+  // IE8
+  if (typeof Document === 'undefined') {
+    console.error('Your browser does not support intercept document.cookie.');
+    return;
+  }
+
+  // In Chrome, Safari, Opera, Edge and IE9+ the cookie property is defined on
+  // `Document.prototype`, whereas in Firefox it is defined on
+  // `HTMLDocument.prototype`.
+  var originalCookieDescriptor =
+    Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
+    Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
+  var cookieDescriptor = Object.getOwnPropertyDescriptor(document, 'cookie');
+  var getter = function getter() {
+    if (!readEnabled) {
+      return '';
     }
+    if (readHandlers.length) {
+      return readHandlers.reduce(function (prevOutput, currentFn) {
+        return currentFn(prevOutput);
+      }, originalCookieDescriptor.get.call(document));
+    }
+    return originalCookieDescriptor.get.call(document);
+  };
+  var setter = function setter(val) {
+    if (!writeEnabled) {
+      return;
+    }
+    if (writeHandlers.length) {
+      var output = writeHandlers.reduce(function (prevOutput, currentFn) {
+        return currentFn(prevOutput);
+      }, val);
+      originalCookieDescriptor.set.call(document, output);
+      return;
+    }
+    originalCookieDescriptor.set.call(document, val);
+  }
+
+  if (cookieDescriptor && cookieDescriptor.configurable === false) {
+    if (cookieDescriptor.set && cookieDescriptor.get._cookieInterceptor) {
+      console.warn('"cookie-interceptor" is loaded more than once on this page.');
+    } else {
+      console.error('Cannot redefine non-configurable property "cookie"');
+    }
+    return;
+  }
+
+  Object.defineProperty(document, 'cookie', {
+    configurable: false,
+    get: getter,
+    set: setter
   });
-} else {
-  console.error('Your browser does not support intercept document.cookie.');
+  getter._cookieInterceptor = true;
 }
 
 var api = {
@@ -93,29 +117,31 @@ var api = {
   }
 };
 
-Object.defineProperties(api, {
-  readEnabled: {
+if (Object.defineProperties && Object.defineProperty) {
+  Object.defineProperties(api, {
+    readEnabled: {
+      get: function () {
+        return api.isReadEnabled();
+      }
+    },
+    writeEnabled: {
+      get: function () {
+        return api.isWriteEnabled();
+      }
+    }
+  });
+
+  Object.defineProperty(api.read, 'enabled', {
     get: function () {
       return api.isReadEnabled();
     }
-  },
-  writeEnabled: {
+  });
+
+  Object.defineProperty(api.write, 'enabled', {
     get: function () {
       return api.isWriteEnabled();
     }
-  }
-});
-
-Object.defineProperty(api.read, 'enabled', {
-  get: function () {
-    return api.isReadEnabled();
-  }
-});
-
-Object.defineProperty(api.write, 'enabled', {
-  get: function () {
-    return api.isWriteEnabled();
-  }
-});
+  });
+}
 
 export default api;
