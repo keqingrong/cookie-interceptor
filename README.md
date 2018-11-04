@@ -75,3 +75,8 @@ CookieInterceptor.write.use(function (val) {
 ## License
 
 MIT
+
+## References
+
+- [Proxying of document.cookie - Stack Overflow](https://stackoverflow.com/questions/32410331/proxying-of-document-cookie)
+
