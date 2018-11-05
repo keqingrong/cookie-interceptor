@@ -10,7 +10,17 @@ defineCookie();
 function defineCookie() {
   // IE8
   if (typeof Document === 'undefined') {
-    console.error('Your browser does not support intercept document.cookie.');
+    if (typeof console !== 'undefined') {
+      console.error('Your browser does not support intercept document.cookie.');
+    }
+    return;
+  }
+
+  // Check whether or not the cookies is enabled.
+  if (!navigator.cookieEnabled) {
+    console.error(
+      'Your browser does not support or is blocking cookies from being set.'
+    );
     return;
   }
 
@@ -48,7 +58,10 @@ function defineCookie() {
 
   if (cookieDescriptor && cookieDescriptor.configurable === false) {
     if (cookieDescriptor.set && cookieDescriptor.get._cookieInterceptor) {
-      console.warn('"cookie-interceptor" is loaded more than once on this page.');
+      console.error(
+        '"cookie-interceptor" is loaded more than once on this page, ' +
+        'it may not work as expected.'
+        );
     } else {
       console.error('Cannot redefine non-configurable property "cookie"');
     }
