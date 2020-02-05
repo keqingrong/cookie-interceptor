@@ -13,12 +13,12 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "rollup -c && npm run uglify",
+    "build": "rollup -c && npm run minify",
     "watch": "rollup -w -c",
     "open": "opn http://localhost:3000/example/",
     "serve": "serve -l 3000 ./",
     "start": "npm-run-all -p watch serve open",
-    "uglify": "terser dist/cookie-interceptor.umd.js --comments -c -m -o dist/cookie-interceptor.umd.min.js"
+    "minify": "terser dist/cookie-interceptor.umd.js --comments -c -m -o dist/cookie-interceptor.umd.min.js"
   },
   "repository": "keqingrong/cookie-interceptor",
   "keywords": [

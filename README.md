@@ -23,6 +23,13 @@ The CDN build is also available on unpkg:
 ```js
 import CookieInterceptor from 'cookie-interceptor';
 
+CookieInterceptor.init(); // Hijack the `document.cookie` object
+
+CookieInterceptor.read.use(function (cookie) {
+  console.log('logger: ', cookie);
+  return cookie;
+});
+
 CookieInterceptor.disableRead().disableWrite();
 
 document.cookie = 'date=20180915';
@@ -79,4 +86,3 @@ MIT
 ## References
 
 - [Proxying of document.cookie - Stack Overflow](https://stackoverflow.com/questions/32410331/proxying-of-document-cookie)
-

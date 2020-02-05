@@ -1,13 +1,15 @@
 import { version } from '../package.json';
 
+var isInitialized = false;
 var readEnabled = true;
 var writeEnabled = true;
 var readHandlers = [];
 var writeHandlers = [];
 
-defineCookie();
-
-function defineCookie() {
+/**
+ * Hijack the `document.cookie` object
+ */
+function hijackCookie() {
   // IE8
   if (typeof Document === 'undefined') {
     if (typeof console !== 'undefined') {
@@ -78,6 +80,11 @@ function defineCookie() {
 
 var api = {
   version: version,
+  init: function () {
+    if (!isInitialized) {
+      hijackCookie();
+    }
+  },
   isReadEnabled: function () {
     return readEnabled;
   },

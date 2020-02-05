@@ -5,6 +5,8 @@ deleteAllCookies();
 document.cookie = ('time=' + new Date().getTime());
 printCookieStatus();
 
+CookieInterceptor.init();
+
 CookieInterceptor.disableRead();
 printCookieStatus();
 

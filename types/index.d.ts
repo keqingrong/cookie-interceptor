@@ -1,5 +1,6 @@
 declare const CookieInterceptor: {
   version: string;
+  init: () => void;
   readEnabled: boolean;
   writeEnabled: boolean;
   isReadEnabled: () => boolean;
